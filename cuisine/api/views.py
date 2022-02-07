@@ -1,7 +1,8 @@
-from tkinter import Menu
 from cuisine.models import Restaurant, Menu, Item
 from tenants.utils import get_tenant_from_request
 from .serializers import RestaurantSerializer, MenuSerializer, ItemSerializer
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateAPIView
 from rest_framework.permissions import AllowAny
 
@@ -66,12 +67,31 @@ class ItemDetailView(RetrieveUpdateAPIView):
         return queryset
 
 
-# class IItemCreate(CreateAPIView):
-#     serializer_class = ItemSerializer
+class RestaurantCreateView(APIView):
+    def post(self, request):
+        serializer = RestaurantSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
 
-#     def perform_create(self, serializer):
-#         pk = self.kwargs['pk']
-#         tenant = get_tenant_from_request(self.request)
-#         item = Menu.objects.filter(tenant).filter(menu_items=pk)
 
-#         return serializer.save(menu_item=item)
+class MenuCreateView(APIView):
+    def post(self, request):
+        serializer = MenuSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+
+
+class ItemCreateView(APIView):
+    def post(self, request):
+        serializer = ItemSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)

@@ -6,7 +6,6 @@ class RestaurantSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Restaurant
-        # fields = ("__all__")
         exclude = ("pub_date", "last_updated")
 
 
@@ -14,7 +13,6 @@ class ItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Item
-        # fields = ("__all__")
         exclude = ("pub_date", "last_updated")
 
 
@@ -23,5 +21,4 @@ class MenuSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Menu
-        # fields = ("__all__")
         exclude = ("pub_date", "last_updated")
