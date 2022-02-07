@@ -7,7 +7,10 @@ from cuisine.api.views import (RestaurantListView,
                                ItemDetailView,
                                MenuCreateView,
                                ItemCreateView,
-                               RestaurantCreateView
+                               RestaurantCreateView,
+                               RestaurantDeleteView,
+                               MenuDeleteView,
+                               ItemDeleteView
                                )
 
 
@@ -27,4 +30,10 @@ urlpatterns = [
          MenuCreateView.as_view(), name='menu-create'),
     path('restaurant/menu/items/create/',
          ItemCreateView.as_view(), name='item-create'),
+    path('restaurant/<int:pk>/delete/',
+         RestaurantDeleteView.as_view(), name='restaurant-delete'),
+    path('restaurant/menu/<int:pk>/delete/',
+         MenuDeleteView.as_view(), name='menu-delete'),
+    path('restaurant/menu/items/<int:pk>/delete/',
+         ItemDeleteView.as_view(), name='item-delete'),
 ]
