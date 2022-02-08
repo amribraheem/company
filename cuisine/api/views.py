@@ -1,5 +1,6 @@
 from cuisine.models import Restaurant, Menu, Item
 from tenants.utils import get_tenant_from_request
+from django.shortcuts import get_object_or_404
 from .serializers import RestaurantSerializer, MenuSerializer, ItemSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -13,8 +14,7 @@ class RestaurantListView(ListAPIView):
     serializer_class = RestaurantSerializer
 
     def get_queryset(self):
-        tenant = get_tenant_from_request(self.request)
-        queryset = Restaurant.objects.filter(tenant=tenant)
+        queryset = Restaurant.tenantfilterobject.filter_by_tenant(self.request)
         return queryset
 
 
@@ -23,8 +23,7 @@ class MenuListView(ListAPIView):
     serializer_class = MenuSerializer
 
     def get_queryset(self):
-        tenant = get_tenant_from_request(self.request)
-        queryset = Menu.objects.filter(tenant=tenant)
+        queryset = Menu.tenantfilterobject.filter_by_tenant(self.request)
         return queryset
 
 
@@ -33,8 +32,7 @@ class itemListView(ListAPIView):
     serializer_class = ItemSerializer
 
     def get_queryset(self):
-        tenant = get_tenant_from_request(self.request)
-        queryset = Item.objects.filter(tenant=tenant)
+        queryset = Item.tenantfilterobject.filter_by_tenant(self.request)
         return queryset
 
 
@@ -43,8 +41,7 @@ class RestaurantDetailView(RetrieveUpdateAPIView):
     serializer_class = RestaurantSerializer
 
     def get_queryset(self):
-        tenant = get_tenant_from_request(self.request)
-        queryset = Restaurant.objects.filter(tenant=tenant)
+        queryset = Restaurant.tenantfilterobject.filter_by_tenant(self.request)
         return queryset
 
 
@@ -53,8 +50,7 @@ class MenuDetailView(RetrieveUpdateAPIView):
     serializer_class = MenuSerializer
 
     def get_queryset(self):
-        tenant = get_tenant_from_request(self.request)
-        queryset = Menu.objects.filter(tenant=tenant)
+        queryset = Menu.tenantfilterobject.filter_by_tenant(self.request)
         return queryset
 
 
@@ -63,8 +59,7 @@ class ItemDetailView(RetrieveUpdateAPIView):
     serializer_class = ItemSerializer
 
     def get_queryset(self):
-        tenant = get_tenant_from_request(self.request)
-        queryset = Item.objects.filter(tenant=tenant)
+        queryset = Item.tenantfilterobject.filter_by_tenant(self.request)
         return queryset
 
 
@@ -103,7 +98,7 @@ class RestaurantDeleteView(APIView):
     def delete(self, request, pk):
         tenant = get_tenant_from_request(self.request)
         queryset = Restaurant.objects.filter(tenant=tenant)
-        restaurant = queryset.get(pk=pk)
+        restaurant = get_object_or_404(queryset, pk=pk)
         restaurant.delete()
         return Response(status=HTTP_204_NO_CONTENT)
 
@@ -113,8 +108,8 @@ class MenuDeleteView(APIView):
     def delete(self, request, pk):
         tenant = get_tenant_from_request(self.request)
         queryset = Menu.objects.filter(tenant=tenant)
-        restaurant = queryset.get(pk=pk)
-        restaurant.delete()
+        menu = get_object_or_404(queryset, pk=pk)
+        menu.delete()
         return Response(status=HTTP_204_NO_CONTENT)
 
 
@@ -123,6 +118,6 @@ class ItemDeleteView(APIView):
     def delete(self, request, pk):
         tenant = get_tenant_from_request(self.request)
         queryset = Item.objects.filter(tenant=tenant)
-        restaurant = queryset.get(pk=pk)
-        restaurant.delete()
+        item = get_object_or_404(queryset, pk=pk)
+        item.delete()
         return Response(status=HTTP_204_NO_CONTENT)

@@ -1,6 +1,6 @@
-from pydoc import describe
 from django.db import models
 from tenants.models import TenantAwareModel
+from cuisine.api.manager import TenantFilterManager
 
 
 class Restaurant(TenantAwareModel):
@@ -8,6 +8,8 @@ class Restaurant(TenantAwareModel):
     describtion = models.CharField(max_length=255, null=True, blank=True)
     pub_date = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
+    objects = models.Manager()
+    tenantfilterobject = TenantFilterManager()
 
     def __str__(self):
         return self.name
@@ -19,6 +21,8 @@ class Menu(TenantAwareModel):
     last_updated = models.DateTimeField(auto_now=True)
     rest = models.ForeignKey(
         Restaurant, related_name='rest', on_delete=models.CASCADE)
+    objects = models.Manager()
+    tenantfilterobject = TenantFilterManager()
 
     def __str__(self):
         return self.name
@@ -31,6 +35,8 @@ class Item(TenantAwareModel):
     Ingredients = models.CharField(max_length=255)
     pub_date = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
+    objects = models.Manager()
+    tenantfilterobject = TenantFilterManager()
 
     def __str__(self):
         return self.menu_item
